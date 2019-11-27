@@ -2,7 +2,7 @@ import * as moment from 'moment';
 
 var Record = require("./recordModel");
 
-// index actions
+// just returns all the records
 exports.index = function (req, res) {
     Record.get(function (err, records: ResponseRecord) {
         if (err) {

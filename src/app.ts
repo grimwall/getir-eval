@@ -27,8 +27,7 @@ if (cluster.isMaster) {
 
   // Code to run if we're in a worker process
 } else {
-  const bodyParser = require("body-parser");
-  const moongoose = require("mongoose");
+
   // Initialize the app
   const app = express();
   // Import routes
