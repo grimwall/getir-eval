@@ -14,6 +14,7 @@ app.use(bodyParser.urlencoded({
 
 app.use(bodyParser.json());
 
+//get this from a secrets file 
 moongoose.connect('mongodb://dbUser:dbPassword1@ds249623.mlab.com:49623/getir-case-study',
   { useNewUrlParser: true });
 
