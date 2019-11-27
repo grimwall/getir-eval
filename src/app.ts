@@ -1,5 +1,8 @@
-// Include the cluster module
-let cluster = require('cluster');
+import * as express from 'express';
+import * as bodyParser from 'body-parser';
+import * as moongoose from 'mongoose';
+import * as cluster from 'cluster';
+
 
 // Code to run if we're in the master process
 if (cluster.isMaster) {
@@ -7,30 +10,29 @@ if (cluster.isMaster) {
   cluster.fork();
   cluster.fork();
 
-  cluster.on('disconnect', (worker) => {
-    console.error('disconnect!');
+  cluster.on("disconnect", () => {
+    console.error("disconnect!");
     cluster.fork();
   });
 
   // Listen for dying workers
-  cluster.on('exit', function (worker) {
+  cluster.on("exit", function (worker: { id: any; }) {
 
     // Replace the dead worker,
     // we're not sentimental
-    console.log('Worker %d died :(', worker.id);
+    console.log("Worker %d died :(", worker.id);
     cluster.fork();
 
   });
 
   // Code to run if we're in a worker process
 } else {
-  let express = require('express')
-  let bodyParser = require('body-parser');
-  let moongoose = require('mongoose');
+  const bodyParser = require("body-parser");
+  const moongoose = require("mongoose");
   // Initialize the app
-  let app = express();
+  const app = express();
   // Import routes
-  let apiRoutes = require("./api-routes")
+  const apiRoutes = require("./api-routes");
 
   // Use Api routes in the App
   app.use(bodyParser.urlencoded({
@@ -39,25 +41,26 @@ if (cluster.isMaster) {
 
   app.use(bodyParser.json());
 
-  //get this from a secrets file 
+  // get this from a secrets file
   moongoose.connect(process.env.DATABASE_URL,
     { useNewUrlParser: true });
 
-  var db = moongoose.connection;
+  const db = moongoose.connection;
 
-  if (!db)
+  if (!db) {
     console.log("db kaput💩");
-  else
+  } else {
     console.log("DB is online 🐱‍💻");
+  }
 
   // Setup server port
-  var port = process.env.PORT || 8080;
+  const port = process.env.PORT || 8080;
   // Send message for default URL
-  app.get('/', (req, res) => res.send('Hello from Worker ' + cluster.worker.id));
+  app.get("/", (req: any, res: any) => res.send("Hello from Worker " + cluster.worker.id));
   // Launch app to listen to specified port
-  app.use('/api', apiRoutes)
+  app.use("/api", apiRoutes);
   app.listen(port, function () {
     console.log("Running RestHub on port " + port);
-    console.log('Worker %d running!', cluster.worker.id);
+    console.log("Worker %d running!", cluster.worker.id);
   });
 }
