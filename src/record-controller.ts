@@ -2,26 +2,7 @@ import * as moment from 'moment';
 import { ResponseRecord } from './response-record'
 import { RecordEntity } from './record-entity';
 import { SearchReq } from './search-req';
-
-let Record = require("./record-model");
-
-// just returns all the records directly from mongo
-exports.index = (req, res) => {
-    Record.get((err, records: [ResponseRecord]) => {
-        if (err) {
-            console.error(err.stack);
-            res.status(400).json({
-                code: "1",
-                msg: err,
-            });
-        }
-        res.json({
-            code: "0",
-            msg: "records retrieved: " + records.length,
-            records
-        });
-    }, 1000);
-};
+import { RecordRepo } from './record-repo';
 
 // searches for records
 exports.search = (req, res) => {
@@ -37,31 +18,10 @@ exports.search = (req, res) => {
         return res;
     }
 
-    const startDate = moment(req.body.startDate);
-    const endDate = moment(req.body.endDate);
+    let repo = new RecordRepo();
 
-    // todo figure out a better way for filtering on array sum
-    // predicate to filter only records with sum of counts betwen required counts
-    const whereFunc = `function () {  const arrSum = arr => arr.reduce((a, b) => a + b, 0);
-                var sum = arrSum(this.counts);
-                return (sum >= ` + req.body.minCount + ` && sum <= ` + req.body.maxCount + `);    }`;
-
-    const query = Record
-        .where("createdAt")
-        .gte(new Date(startDate.toDate()))
-        .lte(new Date(endDate.toDate()))
-        .$where(whereFunc)
-        ;
-
-    query.exec((err: any, records: [RecordEntity]) => {
-        if (err) {
-            console.error(err.stack);
-            res.status(500)
-                .json({
-                    code: 1,
-                    msg: "DB ERROR!: " + err
-                });
-        } else {
+    repo.search(req.body).then(
+        (records) => {
             res.json({
                 code: 0,
                 msg: "Retrieved record count: " + records.length,
@@ -76,8 +36,16 @@ exports.search = (req, res) => {
                     return rec;
                 })
             });
+        },
+        (err) => {
+            console.error(err.stack);
+            res.status(500)
+                .json({
+                    code: 1,
+                    msg: "DB ERROR!: " + err
+                });
         }
-    });
+    );
 };
 
 // sums a number array

@@ -8,7 +8,3 @@ let recordSchema = mongoose.Schema({
 });
 
 let Record = module.exports = mongoose.model("record", recordSchema);
-
-module.exports.get = function (callback: any, limit: any) {
-    Record.find(callback).limit(limit);
-};
