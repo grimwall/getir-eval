@@ -73,10 +73,10 @@ exports.search = function (req, res) {
 };
 
 // sums a number array
-const arraySum = (array: [number]) => array.reduce((a, b) => a + b, 0);
+const arraySum = (array: [number]): number => array.reduce((a, b) => a + b, 0);
 
 // validates dates and counts
-const hasValidInputs = function (req: { body: SearchReq; }) {
+const hasValidInputs = function (req: { body: SearchReq; }): string {
     // validate input
     const startDate = moment(req.body.startDate);
     const endDate = moment(req.body.endDate);
@@ -85,6 +85,11 @@ const hasValidInputs = function (req: { body: SearchReq; }) {
         console.log("invalid dates!");
         return "invalid dates!";
     }
+
+    if (startDate.isAfter(endDate)) {
+        console.log("invalid date order!");
+        return "start date must not be after end date!";
+    };
 
     if (isNaN(req.body.minCount) || isNaN(req.body.maxCount)) {
         return "invalid counts!";
