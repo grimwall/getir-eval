@@ -1,6 +1,6 @@
 import * as moment from 'moment';
 
-var Record = require("./recordModel");
+var Record = require("./record-model");
 
 // just returns all the records directly from mongo
 exports.index = (req, res) => {

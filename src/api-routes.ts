@@ -2,7 +2,7 @@ import * as express from 'express';
 
 const router = express.Router();
 
-let recordController = require("./recordController");
+let recordController = require("./record-controller");
 
 router.route("/api/records")
     .get(recordController.index)
