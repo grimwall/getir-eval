@@ -3,7 +3,7 @@ import * as moment from 'moment';
 var Record = require("./recordModel");
 
 // just returns all the records
-exports.index = function (req, res) {
+exports.index = (req, res) => {
     Record.get(function (err, records: ResponseRecord) {
         if (err) {
             res.json({
@@ -20,13 +20,13 @@ exports.index = function (req, res) {
 };
 
 // searches for records
-exports.search = function (req, res) {
+exports.search = (req, res) => {
 
     const errorMessage = hasValidInputs(req);
 
     if (errorMessage) {
         res.json({
-            code: 1,
+            code: 2,
             msg: errorMessage
         });
         return res;
@@ -48,7 +48,7 @@ exports.search = function (req, res) {
         .$where(whereFunc)
         ;
 
-    query.exec(function (err: any, records: [RecordEntity]) {
+    query.exec((err: any, records: [RecordEntity]) => {
         if (err) {
             res.json({
                 code: 1,
@@ -76,14 +76,14 @@ exports.search = function (req, res) {
 const arraySum = (array: [number]): number => array.reduce((a, b) => a + b, 0);
 
 // validates dates and counts
-const hasValidInputs = function (req: { body: SearchReq; }): string {
+const hasValidInputs = (req: { body: SearchReq; }): string => {
     // validate input
     const startDate = moment(req.body.startDate);
     const endDate = moment(req.body.endDate);
 
-    if (!startDate.isValid() || !endDate.isValid()) {
+    if (!req.body.startDate || !req.body.endDate || !startDate.isValid() || !endDate.isValid()) {
         console.log("invalid dates!");
-        return "invalid dates!";
+        return "dates are required and must be in YYYY-MM-DD format!";
     }
 
     if (startDate.isAfter(endDate)) {

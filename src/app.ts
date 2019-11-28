@@ -33,12 +33,23 @@ if (cluster.isMaster) {
   // Import routes
   const apiRoutes = require("./api-routes");
 
-  // Use Api routes in the App
   app.use(bodyParser.urlencoded({
     extended: true
   }));
 
-  app.use(bodyParser.json());
+  app.use(bodyParser.json({ type: 'application/json' }));
+
+  app.use((err, req, res, next) => {
+    if (err) {
+      console.log('Invalid Request data' + err)
+      res.send({
+        status: "1",
+        message: "Invalid Request format! detail: " + err
+      })
+    } else {
+      next()
+    }
+  });
 
   // get this from a secrets file
   moongoose.connect(process.env.DATABASE_URL,
