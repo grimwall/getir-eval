@@ -99,4 +99,8 @@ const hasValidInputs = (req: { body: SearchReq; }): string => {
     if (isNaN(req.body.minCount) || isNaN(req.body.maxCount)) {
         return "invalid counts!";
     }
+
+    if (req.body.minCount > req.body.maxCount) {
+        return "invalid counts, min must be smaller than max!";
+    }
 };
