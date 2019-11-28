@@ -6,6 +6,7 @@ var Record = require("./recordModel");
 exports.index = (req, res) => {
     Record.get(function (err, records: ResponseRecord) {
         if (err) {
+            res.statusCode = 400;
             res.json({
                 code: "1",
                 msg: err,
@@ -25,6 +26,7 @@ exports.search = (req, res) => {
     const errorMessage = hasValidInputs(req);
 
     if (errorMessage) {
+        res.statusCode = 400;
         res.json({
             code: 2,
             msg: errorMessage
@@ -50,16 +52,18 @@ exports.search = (req, res) => {
 
     query.exec((err: any, records: [RecordEntity]) => {
         if (err) {
+            res.statusCode = 400;
             res.json({
                 code: 1,
                 msg: "DB ERROR!: " + err
             });
         }
+
         res.json({
             code: 0,
             msg: "Retrieved record count: " + records.length,
             records: records.map((r: RecordEntity) => {
-                // return only the required fields
+                // map to response
                 const rec: ResponseRecord = {
                     key: r.key,
                     createdAt: r.createdAt,

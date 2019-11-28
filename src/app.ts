@@ -42,6 +42,7 @@ if (cluster.isMaster) {
   app.use((err, req, res, next) => {
     if (err) {
       console.log('Invalid Request data' + err)
+      res.statusCode = 400;
       res.send({
         status: "1",
         message: "Invalid Request format! detail: " + err
