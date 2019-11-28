@@ -2,7 +2,7 @@ import * as moment from 'moment';
 
 var Record = require("./recordModel");
 
-// just returns all the records
+// just returns all the records directly from mongo
 exports.index = (req, res) => {
     Record.get(function (err, records: ResponseRecord) {
         if (err) {
@@ -52,7 +52,8 @@ exports.search = (req, res) => {
 
     query.exec((err: any, records: [RecordEntity]) => {
         if (err) {
-            res.status(400)
+            console.error(err.stack);
+            res.status(500)
                 .json({
                     code: 1,
                     msg: "DB ERROR!: " + err

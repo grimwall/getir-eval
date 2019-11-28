@@ -3,7 +3,7 @@ import * as bodyParser from 'body-parser';
 import * as moongoose from 'mongoose';
 import * as cluster from 'cluster';
 
-
+//clustering to recover from unhandled exceptions
 // Code to run if we're in the master process
 if (cluster.isMaster) {
 
@@ -18,8 +18,7 @@ if (cluster.isMaster) {
   // Listen for dying workers
   cluster.on("exit", function (worker: { id: any; }) {
 
-    // Replace the dead worker,
-    // we're not sentimental
+    // Replace the dead worker
     console.log("Worker %d died :(", worker.id);
     cluster.fork();
 
@@ -39,6 +38,7 @@ if (cluster.isMaster) {
 
   app.use(bodyParser.json({ type: 'application/json' }));
 
+  //handle errors
   app.use((err, req, res, next) => {
     if (err) {
       console.log('Invalid Request data' + err)
@@ -53,7 +53,7 @@ if (cluster.isMaster) {
     }
   });
 
-  // get this from a secrets file
+  //connect to DB
   moongoose.connect(process.env.DATABASE_URL,
     { useNewUrlParser: true });
 
@@ -68,9 +68,10 @@ if (cluster.isMaster) {
   // Setup server port
   const port = process.env.PORT || 8080;
 
-  // Launch app to listen to specified port
+  //setup routing
   app.use("/api", apiRoutes);
 
+  // Launch app to listen to specified port
   app.listen(port, () => {
     console.log("Running RestHub on port " + port);
     console.log("Worker %d running!", cluster.worker.id);
