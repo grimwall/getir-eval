@@ -6,8 +6,8 @@ var Record = require("./recordModel");
 exports.index = (req, res) => {
     Record.get(function (err, records: ResponseRecord) {
         if (err) {
-            res.statusCode = 400;
-            res.json({
+            console.error(err.stack);
+            res.status(400).json({
                 code: "1",
                 msg: err,
             });
@@ -26,11 +26,11 @@ exports.search = (req, res) => {
     const errorMessage = hasValidInputs(req);
 
     if (errorMessage) {
-        res.statusCode = 400;
-        res.json({
-            code: 2,
-            msg: errorMessage
-        });
+        res.status(400)
+            .json({
+                code: 2,
+                msg: errorMessage
+            });
         return res;
     }
 
@@ -52,11 +52,11 @@ exports.search = (req, res) => {
 
     query.exec((err: any, records: [RecordEntity]) => {
         if (err) {
-            res.statusCode = 400;
-            res.json({
-                code: 1,
-                msg: "DB ERROR!: " + err
-            });
+            res.status(400)
+                .json({
+                    code: 1,
+                    msg: "DB ERROR!: " + err
+                });
         }
 
         res.json({
