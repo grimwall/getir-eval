@@ -1,4 +1,4 @@
-interface RecordEntity extends Document{
+export interface RecordEntity extends Document {
     key: String;
     value: String;
     createdAt: Date;

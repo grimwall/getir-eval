@@ -1,6 +1,9 @@
 import * as moment from 'moment';
+import { ResponseRecord } from './response-record'
+import { RecordEntity } from './record-entity';
+import { SearchReq } from './search-req';
 
-var Record = require("./record-model");
+let Record = require("./record-model");
 
 // just returns all the records directly from mongo
 exports.index = (req, res) => {
@@ -58,22 +61,22 @@ exports.search = (req, res) => {
                     code: 1,
                     msg: "DB ERROR!: " + err
                 });
+        } else {
+            res.json({
+                code: 0,
+                msg: "Retrieved record count: " + records.length,
+                records: records.map((r: RecordEntity) => {
+                    // map to response
+                    const rec: ResponseRecord = {
+                        key: r.key,
+                        createdAt: r.createdAt,
+                        totalCount: arraySum(r.counts)
+                    };
+
+                    return rec;
+                })
+            });
         }
-
-        res.json({
-            code: 0,
-            msg: "Retrieved record count: " + records.length,
-            records: records.map((r: RecordEntity) => {
-                // map to response
-                const rec: ResponseRecord = {
-                    key: r.key,
-                    createdAt: r.createdAt,
-                    totalCount: arraySum(r.counts)
-                };
-
-                return rec;
-            })
-        });
     });
 };
 

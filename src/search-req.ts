@@ -1,6 +1,6 @@
-interface SearchReq {
-    startDate: string;
-    endDate: string;
-    minCount: number;
-    maxCount: number;
+export interface SearchReq {
+    startDate?: string;
+    endDate?: string;
+    minCount?: number;
+    maxCount?: number;
 }
