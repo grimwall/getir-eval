@@ -4,7 +4,7 @@ const router = express.Router();
 
 let recordController = require("./recordController");
 
-router.route("/records")
+router.route("/api/records")
     .get(recordController.index)
     .post(recordController.search)
     .all(forbid());

@@ -69,7 +69,7 @@ if (cluster.isMaster) {
   const port = process.env.PORT || 8080;
 
   //setup routing
-  app.use("/api", apiRoutes);
+  app.use("/", apiRoutes);
 
   // Launch app to listen to specified port
   app.listen(port, () => {
