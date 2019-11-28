@@ -16,7 +16,7 @@ export = router;
 
 function forbid() {
     return (req, res) => {
-        res.status(400).send({
+        res.status(405).send({
             status: "1",
             message: "nope"
         }).end();

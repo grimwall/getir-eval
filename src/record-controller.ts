@@ -4,7 +4,7 @@ var Record = require("./record-model");
 
 // just returns all the records directly from mongo
 exports.index = (req, res) => {
-    Record.get(function (err, records: ResponseRecord) {
+    Record.get((err, records: [ResponseRecord]) => {
         if (err) {
             console.error(err.stack);
             res.status(400).json({
@@ -14,10 +14,10 @@ exports.index = (req, res) => {
         }
         res.json({
             code: "0",
-            msg: "records retrieved",
+            msg: "records retrieved: " + records.length,
             records
         });
-    });
+    }, 1000);
 };
 
 // searches for records
