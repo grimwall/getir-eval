@@ -67,11 +67,11 @@ if (cluster.isMaster) {
 
   // Setup server port
   const port = process.env.PORT || 8080;
-  // Send message for default URL
-  app.get("/", (req: any, res: any) => res.send("Hello from Worker " + cluster.worker.id));
+
   // Launch app to listen to specified port
   app.use("/api", apiRoutes);
-  app.listen(port, function () {
+
+  app.listen(port, () => {
     console.log("Running RestHub on port " + port);
     console.log("Worker %d running!", cluster.worker.id);
   });
