@@ -2,7 +2,7 @@ import * as express from 'express';
 
 const router = express.Router();
 
-let recordController = require("./record-controller");
+const recordController = require("./record-controller");
 
 router.route("/api/records")
     .post(recordController.search)

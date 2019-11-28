@@ -18,7 +18,7 @@ exports.search = (req, res) => {
         return res;
     }
 
-    let repo = new RecordRepo();
+    const repo = new RecordRepo();
 
     repo.search(req.body).then(
         (records) => {

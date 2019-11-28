@@ -1,10 +1,10 @@
-let mongoose = require("mongoose");
+const mongoose = require("mongoose");
 
-let recordSchema = mongoose.Schema({
+const recordSchema = mongoose.Schema({
     key: String,
     value: String,
     createdAt: Date,
     counts: [Number]
 });
 
-let Record = module.exports = mongoose.model("record", recordSchema);
+const Record = module.exports = mongoose.model("record", recordSchema);
