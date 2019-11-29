@@ -38,7 +38,7 @@ exports.search = (req, res) => {
             });
         },
         (err) => {
-            console.error(err.stack);
+            console.error(err);
             res.status(500)
                 .json({
                     code: 1,
@@ -49,7 +49,7 @@ exports.search = (req, res) => {
 };
 
 // sums a number array
-const arraySum = (array: [number]): number => array.reduce((a, b) => a + b, 0);
+const arraySum = (array: number[]): number => array.reduce((a, b) => a + b, 0);
 
 // validates dates and counts
 const hasValidInputs = (req: { body: SearchReq; }): string => {

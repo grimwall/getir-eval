@@ -5,6 +5,6 @@
         "target": "es5"
     },
     "include": [
-        "./src/**/*"
+        "./src/**/*", "src/record-controller.test.ts"
     ]
 }

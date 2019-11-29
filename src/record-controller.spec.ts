@@ -1,4 +1,8 @@
-import { SearchReq } from '../src/search-req';
+import { SearchReq } from './search-req';
+import { RecordRepo } from './record-repo';
+
+jest.mock('./record-repo');
+
 let recordController = require("../src/record-controller");
 
 describe('validation errors', () => {
@@ -88,8 +92,44 @@ describe('validation errors', () => {
     });
 
 });
+/* //todo figure out mocking here, async problem?
+describe('db returns', () => {
 
-const mockResponse: any = () => {
+    /*
+        test('verify repo call error', () => {
+    /*
+            let body: SearchReq = {
+                startDate: '2012-10-19',
+                endDate: '2012-10-20',
+                minCount: 10,
+                maxCount: 20
+            };
+    
+            let req = { body: body };
+    
+            const res = mockResponse();
+    
+            recordController.search(req, res);
+    
+            //expect(res.status).toHaveBeenCalledWith(400);
+            /*expect(res.json).toHaveBeenCalledWith({
+                code: 0,
+                msg: "Retrieved record count: " + 1,
+                records: [{
+                    key: "key",
+                    createdAt: new Date('2012-10-19'),
+                    totalCount: 50
+                }]
+            });
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({
+        code: 1,
+        msg: "DB ERROR!: " + "errorrr"
+    });
+});
+});*/
+
+const mockResponse = () => {
     const res: any = {};
     res.status = jest.fn().mockReturnValue(res);
     res.json = jest.fn().mockReturnValue(res);
